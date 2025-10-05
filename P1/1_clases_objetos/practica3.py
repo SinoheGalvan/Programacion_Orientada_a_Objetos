@@ -96,41 +96,14 @@ class Profesores:
         self._experiencia = _experiencia
 
 alumno1 = Alumnos("84789372","Rodrigo",18)
-
 alumno2 = Alumnos("70217387","Karla",20)
+alumno3 = Alumnos("93748173","Diego",21)
 
-alumno3 = Alumnos()
-alumno3.setMatricula("93748173")
-alumno3.setNombre("Diego")
-alumno3.setEdad(21)
+curso1 = Cursos("28394753","Quimica",50)
+curso2 = Cursos("0393842","Calculo Diferencial",60)
+curso3 = Cursos("0373918","Etica",30)
 
-curso1 = Cursos()
-curso1.setCodigo("28394753")
-curso1.setNombre("Quimica")
-curso1.setCreditos(50)
-
-curso2 = Cursos()
-curso2.setCodigo("0393842")
-curso2.setNombre("Calculo Diferencial")
-curso2.setCreditos(60)
-
-curso3 = Cursos()
-curso3.setCodigo("0373918")
-curso3.setNombre("Etica")
-curso3.setCreditos(30)
-
-profesor1 = Profesores()
-profesor1.setNumProfesor("6418")
-profesor1.setNombre("Juan")
-profesor1.setExperiencia(4)
-
-profesor2 = Profesores()
-profesor2.setNumProfesor("0192")
-profesor2.setNombre("Pablo")
-profesor2.setExperiencia(8)
-
-profesor3 = Profesores()
-profesor3.setNumProfesor("8394")
-profesor3.setNombre("Enrique")
-profesor3.setExperiencia(1)
+profesor1 = Profesores("6418","Juan",4)
+profesor2 = Profesores("0192","Pablo",8)
+profesor3 = Profesores("8394","Enrique",1)
 
