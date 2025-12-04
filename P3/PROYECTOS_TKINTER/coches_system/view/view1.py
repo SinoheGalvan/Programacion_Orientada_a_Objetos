@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox, ttk
+from controller import controlador1
 
 class View:
     def __init__(self,ventana):
@@ -14,10 +15,6 @@ class View:
     def limpiar_pantalla(ventana):
         for widget in ventana.winfo_children():
             widget.destroy()
-
-    @staticmethod
-    def agarrar_tipo(tipo_auto):
-        pass
 
     @staticmethod
     def menu_principal(ventana):
@@ -95,40 +92,46 @@ class View:
         lbl_marca = Label(ventana, text="Marca: ", justify=CENTER)
         lbl_marca.pack(pady=5)
 
-        txt_marca = Entry(ventana)
+        marca = StringVar()
+        txt_marca = Entry(ventana, textvariable=marca)
         txt_marca.pack(pady=15)
 
         lbl_color = Label(ventana, text="Color: ", justify=CENTER)
         lbl_color.pack(pady=5)
 
-        txt_color = Entry(ventana)
+        color = StringVar()
+        txt_color = Entry(ventana, textvariable=color)
         txt_color.pack(pady=15)
 
         lbl_modelo = Label(ventana, text="Modelo: ", justify=CENTER)
         lbl_modelo.pack(pady=5)
 
-        txt_modelo = Entry(ventana)
+        modelo = StringVar()
+        txt_modelo = Entry(ventana, textvariable=modelo)
         txt_modelo.pack(pady=15)
 
         lbl_velocidad = Label(ventana, text="Velocidad: ", justify=CENTER)
         lbl_velocidad.pack(pady=5)
 
-        txt_velocidad = Entry(ventana)
+        velocidad = StringVar()
+        txt_velocidad = Entry(ventana, textvariable=velocidad)
         txt_velocidad.pack(pady=15)
 
-        lbl_potencia = Label(ventana, text="Caballaje: ", justify=CENTER)
-        lbl_potencia.pack(pady=5)
+        lbl_caballaje = Label(ventana, text="Caballaje: ", justify=CENTER)
+        lbl_caballaje.pack(pady=5)
 
-        txt_potencia = Entry(ventana)
-        txt_potencia.pack(pady=15)
+        caballaje = StringVar()
+        txt_caballaje = Entry(ventana, textvariable=caballaje)
+        txt_caballaje.pack(pady=15)
 
         lbl_num_plazas = Label(ventana, text="Numero de plazas: ", justify=CENTER)
         lbl_num_plazas.pack(pady=5)
 
-        txt_num_plazas = Entry(ventana)
+        num_plazas = StringVar()
+        txt_num_plazas = Entry(ventana, textvariable=num_plazas)
         txt_num_plazas.pack(pady=15)
 
-        btn_insertar = Button(ventana, text="Guardar", command="", justify=CENTER)
+        btn_insertar = Button(ventana, text="Guardar", command=lambda: controlador1.Controller.insertar_auto(marca.get(),color.get(),modelo.get(),velocidad.get(),caballaje.get(),num_plazas.get()), justify=CENTER)
         btn_insertar.pack(pady=15)
 
         btn_regresar = Button(ventana, text="Regresar", command=lambda: View.menu_acciones(ventana, "autos"), justify=CENTER)
@@ -137,18 +140,10 @@ class View:
     def consultar_autos(ventana):
         View.limpiar_pantalla(ventana)
 
-        lbl_titulo = Label(ventana, text=".:: Consultar auto ::.", justify=CENTER)
+        lbl_titulo = Label(ventana, text=".:: Consultar autos ::.", justify=CENTER)
         lbl_titulo.pack(pady=10)
         
-
-        registro = ["Marca: toyota","Color: blanco","Modelo: 2010","Velocidad: 200","Caballaje: 180","Numero de plazas: 4"]
-
-
-        txt_registro = Text(ventana, height=10, width=30)
-        txt_registro.pack()
-
-        for item in registro:
-            txt_registro.insert(END, item + "\n")
+        controlador1.Controller.consultar_auto(ventana)
 
         btn_regresar = Button(ventana, text="Regresar", command=lambda: View.menu_acciones(ventana,"autos"), justify=CENTER)
         btn_regresar.pack(pady=15)
@@ -162,7 +157,7 @@ class View:
         lbl_id = Label(ventana, text="Ingresa el ID a buscar: ", justify=CENTER).pack(pady=5)
 
         id = IntVar()
-        txt_id = Entry(ventana)
+        txt_id = Entry(ventana, textvariable=id)
         txt_id.pack(pady=15)
 
         if tipo == "actualizar":
@@ -173,78 +168,101 @@ class View:
         btn_regresar = Button(ventana, text="Regresar", command=lambda: View.menu_acciones(ventana, "autos"), justify=CENTER)
         btn_regresar.pack(pady=15)
 
-    def cambiar_autos(ventana,id):
-        View.limpiar_pantalla(ventana)
+    def cambiar_autos(ventana,id_auto):
+        registro = controlador1.Controller.consultar_id_auto(id_auto)
 
-        lbl_titulo = Label(ventana, text=f".:: Cambiar un auto ::.", justify=CENTER)
-        lbl_titulo.pack(pady=10)
+        if registro is None:
+            messagebox.showinfo(icon="warning", message=f"No existe un registro con el id {id_auto}")
+        else:
+            View.limpiar_pantalla(ventana)
 
-        id = IntVar()
-        txt_id = Entry(ventana, textvariable=id, justify=RIGHT, width=5, state="readonly")
-        txt_id.pack(pady=5)
-        
-        lbl_marca = Label(ventana, text="Marca: ", justify=CENTER)
-        lbl_marca.pack(pady=5)
+            lbl_titulo = Label(ventana, text=f".:: Cambiar un auto ::.", justify=CENTER)
+            lbl_titulo.pack(pady=10)
 
-        txt_marca = Entry(ventana)
-        txt_marca.pack(pady=15)
+            id = IntVar()
+            txt_id = Entry(ventana, textvariable=id, justify=RIGHT, width=5, state="readonly")
+            id.set(id_auto)
+            txt_id.pack(pady=5)
+            
+            lbl_marca = Label(ventana, text="Marca: ", justify=CENTER)
+            lbl_marca.pack(pady=5)
 
-        lbl_color = Label(ventana, text="Color: ", justify=CENTER)
-        lbl_color.pack(pady=5)
+            marca = StringVar()
+            txt_marca = Entry(ventana, textvariable=marca)
+            marca.set(registro[1])
+            txt_marca.pack(pady=15)
 
-        txt_color = Entry(ventana)
-        txt_color.pack(pady=15)
+            lbl_color = Label(ventana, text="Color: ", justify=CENTER)
+            lbl_color.pack(pady=5)
 
-        lbl_modelo = Label(ventana, text="Modelo: ", justify=CENTER)
-        lbl_modelo.pack(pady=5)
+            color = StringVar()
+            txt_color = Entry(ventana, textvariable=color)
+            color.set(registro[2])
+            txt_color.pack(pady=15)
 
-        txt_modelo = Entry(ventana)
-        txt_modelo.pack(pady=15)
+            lbl_modelo = Label(ventana, text="Modelo: ", justify=CENTER)
+            lbl_modelo.pack(pady=5)
 
-        lbl_velocidad = Label(ventana, text="Velocidad: ", justify=CENTER)
-        lbl_velocidad.pack(pady=5)
+            modelo = StringVar()
+            txt_modelo = Entry(ventana, textvariable=modelo)
+            modelo.set(registro[3])
+            txt_modelo.pack(pady=15)
 
-        txt_velocidad = Entry(ventana)
-        txt_velocidad.pack(pady=15)
+            lbl_velocidad = Label(ventana, text="Velocidad: ", justify=CENTER)
+            lbl_velocidad.pack(pady=5)
 
-        lbl_potencia = Label(ventana, text="Caballaje: ", justify=CENTER)
-        lbl_potencia.pack(pady=5)
+            velocidad = StringVar()
+            txt_velocidad = Entry(ventana, textvariable=velocidad)
+            velocidad.set(registro[4])
+            txt_velocidad.pack(pady=15)
 
-        txt_potencia = Entry(ventana)
-        txt_potencia.pack(pady=15)
+            lbl_potencia = Label(ventana, text="Caballaje: ", justify=CENTER)
+            lbl_potencia.pack(pady=5)
 
-        lbl_num_plazas = Label(ventana, text="Numero de plazas: ", justify=CENTER)
-        lbl_num_plazas.pack(pady=5)
+            caballaje = StringVar()
+            txt_caballaje = Entry(ventana, textvariable=caballaje)
+            caballaje.set(registro[5])
+            txt_caballaje.pack(pady=15)
 
-        txt_num_plazas = Entry(ventana)
-        txt_num_plazas.pack(pady=15)
+            lbl_num_plazas = Label(ventana, text="Numero de plazas: ", justify=CENTER)
+            lbl_num_plazas.pack(pady=5)
 
-        btn_cambiar = Button(ventana, text="Guardar", command="", justify=CENTER)
-        btn_cambiar.pack(pady=15)
+            num_plazas = StringVar()
+            txt_num_plazas = Entry(ventana, textvariable=num_plazas)
+            num_plazas.set(registro[6])
+            txt_num_plazas.pack(pady=15)
 
-        btn_regresar = Button(ventana, text="Regresar", command=lambda: View.menu_acciones(ventana, "autos"), justify=CENTER)
-        btn_regresar.pack(pady=15)
+            btn_cambiar = Button(ventana, text="Guardar", command=lambda: controlador1.Controller.actualizar_auto(marca.get(),color.get(),modelo.get(),velocidad.get(),caballaje.get(),num_plazas.get(),id_auto), justify=CENTER)
+            btn_cambiar.pack(pady=15)
+
+            btn_regresar = Button(ventana, text="Regresar", command=lambda: View.menu_acciones(ventana, "autos"), justify=CENTER)
+            btn_regresar.pack(pady=15)
 
     def borrar_autos(ventana,id_auto):
-        View.limpiar_pantalla(ventana)
+        registro = controlador1.Controller.consultar_id_auto(id_auto)
 
-        lbl_titulo = Label(ventana, text=f".:: Borrar un auto ::.", justify=CENTER)
-        lbl_titulo.pack(pady=10)
+        if registro is None:
+            messagebox.showinfo(icon="warning", message=f"No existe un registro con el id {id_auto}")
+        else:
+            View.limpiar_pantalla(ventana)
 
-        lbl_id = Label(ventana, text="ID de la operación: ")
-        lbl_id.pack(pady=5)
+            lbl_titulo = Label(ventana, text=f".:: Borrar un auto ::.", justify=CENTER)
+            lbl_titulo.pack(pady=10)
 
-        id = IntVar()
-        txt_id = Entry(ventana, textvariable=id, justify=RIGHT, width=5, state="readonly")
-        id.set(id_auto)
-        txt_id.focus()
-        txt_id.pack(pady=5)
+            lbl_id = Label(ventana, text="ID de la operación: ")
+            lbl_id.pack(pady=5)
 
-        btn_cambiar = Button(ventana, text="Borrar", command="", justify=CENTER)
-        btn_cambiar.pack(pady=15)
+            id = IntVar()
+            txt_id = Entry(ventana, textvariable=id, justify=RIGHT, width=5, state="readonly")
+            id.set(id_auto)
+            txt_id.focus()
+            txt_id.pack(pady=5)
 
-        btn_regresar = Button(ventana, text="Regresar", command=lambda: View.menu_acciones(ventana, "autos"), justify=CENTER)
-        btn_regresar.pack(pady=15)
+            btn_cambiar = Button(ventana, text="Borrar", command=lambda: controlador1.Controller.eliminar_auto(id_auto), justify=CENTER)
+            btn_cambiar.pack(pady=15)
+
+            btn_regresar = Button(ventana, text="Regresar", command=lambda: View.menu_acciones(ventana, "autos"), justify=CENTER)
+            btn_regresar.pack(pady=15)
 
     def insertar_camionetas(ventana):
         View.limpiar_pantalla(ventana)
@@ -279,8 +297,8 @@ class View:
         lbl_potencia = Label(ventana, text="Caballaje: ", justify=CENTER)
         lbl_potencia.pack(pady=5)
 
-        txt_potencia = Entry(ventana)
-        txt_potencia.pack(pady=5)
+        txt_caballaje = Entry(ventana)
+        txt_caballaje.pack(pady=5)
 
         lbl_num_plazas = Label(ventana, text="Numero de plazas: ", justify=CENTER)
         lbl_num_plazas.pack(pady=5)
@@ -312,7 +330,7 @@ class View:
     def consultar_camionetas(ventana):
         View.limpiar_pantalla(ventana)
 
-        lbl_titulo = Label(ventana, text=".:: Consultar [tipo] ::.", justify=CENTER)
+        lbl_titulo = Label(ventana, text=".:: Consultar camionetas ::.", justify=CENTER)
         lbl_titulo.pack(pady=10)
         
 
@@ -385,8 +403,8 @@ class View:
         lbl_potencia = Label(ventana, text="Caballaje: ", justify=CENTER)
         lbl_potencia.pack(pady=5)
 
-        txt_potencia = Entry(ventana)
-        txt_potencia.pack(pady=15)
+        txt_caballaje = Entry(ventana)
+        txt_caballaje.pack(pady=15)
 
         lbl_num_plazas = Label(ventana, text="Numero de plazas: ", justify=CENTER)
         lbl_num_plazas.pack(pady=5)
@@ -469,8 +487,8 @@ class View:
         lbl_potencia = Label(ventana, text="Caballaje: ", justify=CENTER)
         lbl_potencia.pack(pady=5)
 
-        txt_potencia = Entry(ventana)
-        txt_potencia.pack(pady=5)
+        txt_caballaje = Entry(ventana)
+        txt_caballaje.pack(pady=5)
 
         lbl_num_plazas = Label(ventana, text="Numero de plazas: ", justify=CENTER)
         lbl_num_plazas.pack(pady=5)
@@ -500,7 +518,7 @@ class View:
     def consultar_camiones(ventana):
         View.limpiar_pantalla(ventana)
 
-        lbl_titulo = Label(ventana, text=".:: Consultar camion ::.", justify=CENTER)
+        lbl_titulo = Label(ventana, text=".:: Consultar camiones ::.", justify=CENTER)
         lbl_titulo.pack(pady=10)
         
 
@@ -573,8 +591,8 @@ class View:
         lbl_potencia = Label(ventana, text="Caballaje: ", justify=CENTER)
         lbl_potencia.pack(pady=5)
 
-        txt_potencia = Entry(ventana)
-        txt_potencia.pack(pady=15)
+        txt_caballaje = Entry(ventana)
+        txt_caballaje.pack(pady=15)
 
         lbl_num_plazas = Label(ventana, text="Numero de plazas: ", justify=CENTER)
         lbl_num_plazas.pack(pady=5)

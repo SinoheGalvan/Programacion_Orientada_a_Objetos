@@ -119,7 +119,7 @@ class View:
         btn_mostrar = Button(ventana, text="2.- Mostrar", command=lambda: View.interfaz_mostrar(ventana), justify=CENTER)
         btn_mostrar.pack(pady=15)
 
-        btn_cambiar = Button(ventana, text="3.- Cambiar", command=lambda: View.interfaz_cambiar(ventana), justify=CENTER)
+        btn_cambiar = Button(ventana, text="3.- Cambiar", command=lambda: View.interfaz_cambiar(ventana, id_user ,nom_user,ape_user), justify=CENTER)
         btn_cambiar.pack(pady=15)
 
         btn_eliminar = Button(ventana, text="4.- Eliminar", command=lambda: View.interfaz_eliminar(ventana), justify=CENTER)
@@ -188,10 +188,10 @@ class View:
         btn_volver.pack(pady=10)
 
     @staticmethod
-    def interfaz_cambiar(ventana):
+    def interfaz_cambiar(ventana, id_user, nom_user, ape_user):
         View.limpiar_pantalla(ventana)
 
-        lbl_bienvenida = Label(ventana, text=f".:: [nombre y apellidos], vamos a modificar una Nota ::.")
+        lbl_bienvenida = Label(ventana, text=f".:: {nom_user} {ape_user}, vamos a modificar una Nota ::.")
         lbl_bienvenida.pack(pady=10)
 
         lbl_id = Label(ventana, text="ID de la Nota a cambiar:")
@@ -216,7 +216,7 @@ class View:
         txt_descripcion = Entry(ventana)
         txt_descripcion.pack(pady=15)
 
-        btn_guardar= Button(ventana, text="Guardar", command="", justify=CENTER)
+        btn_guardar= Button(ventana, text="Guardar", command=lambda: controlador1.Controlador.cambiar(ventana, id_user ,id.get(),titulo.get(),descripcion.get()), justify=CENTER)
         btn_guardar.pack(pady=15)
 
         btn_volver = Button(ventana, text="Volver", command=lambda: View.interfaz_menu_notas(ventana), justify=CENTER)

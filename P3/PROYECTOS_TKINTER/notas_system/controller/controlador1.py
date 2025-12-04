@@ -26,8 +26,15 @@ class Controlador:
         Controlador.respuesta_sql(respuesta) 
 
     @staticmethod
+    def cambiar(ventana,id_user,id,titulo,descripcion):
+        respuesta = nota.Notas.actualizar(id,titulo,descripcion)
+        Controlador.respuesta_sql(respuesta)
+
+
+    @staticmethod
     def respuesta_sql(respuesta):
         if respuesta:
             messagebox.showinfo(title="Correcto", icon="info", message="Acción realizada con éxito")
+            
         else:
             messagebox.showinfo(title="Atención", icon="warning", message="No se ha podido realizar la operación con éxito")
