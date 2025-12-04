@@ -81,7 +81,7 @@ class Camionetas:
             cursor.execute(
                 "delete from camionetas where id_camioneta=%s",
                 (id_camioneta,))
-            conexion.commit
+            conexion.commit()
             return True
         except:
             return False
@@ -124,7 +124,7 @@ class Camiones:
             cursor.execute(
                 "delete from camiones where id_camion=%s",
                 (id_camion,))
-            conexion.commit
+            conexion.commit()
             return True
         except:
             return False
