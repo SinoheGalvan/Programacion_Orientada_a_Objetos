@@ -1,40 +1,123 @@
+
 from tkinter import messagebox
-from model import usuario,nota
-from view import view1
+from model.usuario import Usuario
+from model.nota import Nota
 
 class Controlador:
+    
+    @staticmethod
+    def respuesta(exito, accion="La acción"):
+        if exito:
+            messagebox.showinfo("Éxito", f"{accion} se realizó exitosamente.", icon="info")
+        else:
+            messagebox.showerror("Error", f"No se pudo completar {accion}. Por favor, verifique los datos.")
+            
     @staticmethod
     def registro(nombre, apellidos, email, password):
-        resultado = usuario.Usuarios.registrar(nombre, apellidos, email, password)
+        resultado = Usuario.registrar(nombre, apellidos, email, password)
         if resultado:
-            messagebox.showinfo(icon='info',title="Usuarios" ,message=f"{nombre} {apellidos}, se registro correctamente, con el email: {email}")
+            messagebox.showinfo(title="Registro Exitoso", message=f"{nombre} registrado correctamente.")
+            return True
         else:
-            messagebox.showwarning(icon="warning", title="Usuarios", message=f"\n\t ** Por favor intentelo de nuevo, no fue posible insertar el registro ** ...")  
+            messagebox.showerror(title="Error", message="No se pudo registrar.")
+            return False
 
     @staticmethod
-    def inicio_sesion(ventana,email, password):
-        registro = usuario.Usuarios.iniciar_sesion(email, password)
+    def iniciarsesion(email, password):
+        registro = Usuario.iniciar_sesion(email, password)
         if registro:
-            messagebox.showinfo(icon='info',title="Usuarios" ,message=f"{registro[1]} {registro[2]}, iniciaste sesión correctamente")
-            view1.View.interfaz_menu_notas(ventana,registro[0],registro[1],registro[2])
+            messagebox.showinfo(title="Bienvenido", message=f"Bienvenido {registro[1]} {registro[2]}")
+            return registro 
         else:
-            messagebox.showwarning(icon="warning", title="Usuarios", message=f"Email y/o contraseña incorrectas... vuelva a intentarlo ...")  
+            messagebox.showerror(title="Error", message="Email o contraseña incorrectos.")
+            return None
+
+    @staticmethod
+    def crearNota(usuario_id, titulo, descripcion):
+        resultado = Nota.crear(usuario_id, titulo, descripcion)
         
+        Controlador.respuesta(resultado, "Crear nota")
+        return resultado
+    
     @staticmethod
-    def insertar(usuario_id,titulo,descripcion):
-        respuesta = nota.Notas.crear(usuario_id,titulo,descripcion)
-        Controlador.respuesta_sql(respuesta) 
+    def obtenerNotas(usuario_id):
+        notas = Nota.mostrar(usuario_id)
+        return notas
+    
+    @staticmethod
+    def actualizarNota(id_nota, nuevo_titulo, nueva_descripcion):
+        resultado = Nota.actualizar(id_nota, nuevo_titulo, nueva_descripcion)
+        
+        Controlador.respuesta(resultado, "La actualización de la nota")
+        return resultado
 
     @staticmethod
-    def cambiar(ventana,id_user,id,titulo,descripcion):
-        respuesta = nota.Notas.actualizar(id,titulo,descripcion)
-        Controlador.respuesta_sql(respuesta)
+    def eliminarNota(id_nota):
+        resultado = Nota.eliminar(id_nota)
+        
+        Controlador.respuesta(resultado, "La eliminación de la nota")
+        return resultado
 
 
-    @staticmethod
-    def respuesta_sql(respuesta):
-        if respuesta:
-            messagebox.showinfo(title="Correcto", icon="info", message="Acción realizada con éxito")
-            
-        else:
-            messagebox.showinfo(title="Atención", icon="warning", message="No se ha podido realizar la operación con éxito")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from tkinter import messagebox
+# from tkinter import *
+# from model.usuario import Usuario
+# from model.nota import Nota
+# from view import view1 
+
+
+# class Controlador:
+    
+#     @staticmethod
+#     def respuesta(exito, accion="La acción"):
+#         if exito:
+#             messagebox.showinfo("Éxito", f"{accion} se realizó exitosamente.", icon="info")
+#         else:
+#             messagebox.showerror("Error", f"No se pudo completar {accion}. Por favor, verifique los datos.")
+
+    
+#     @staticmethod
+#     def registro(nombre, apellidos, email, password):
+#         resultado=Usuario.registrar(nombre, apellidos, email, password)
+#         if resultado:
+#                 messagebox.showinfo(icon="info", message=f"\n\t {nombre} {apellidos}, se registro correctamente, con el email: {email}", title="Registro Exitoso")
+#         else:
+#                 messagebox.showerror(icon="error", message=f"\n\t ** Por favor intentelo de nuevo, no fue posible insertar el registro ** ...", title="Usuarios")
+    
+#     @staticmethod
+#     def iniciarsesion(ventana, email, password):
+#         registro=Usuario.iniciar_sesion(email,password)
+#         if registro:
+#                 messagebox.showinfo(icon="info", message=f"Usuario: {registro[1]} {registro[2]}  Iniciaste sesion Correctamente", title="Usuarios")
+#                 view1.View.menuNotas(ventana, registro[0], registro[1], registro[2])
+#         else:
+#             messagebox.showerror(icon="error", message=f"\n\t Email y/o contraseña incorrectas... vuelva a intentarlo ...")
+
+#     @staticmethod
+#     def crearNota(usuario_id, titulo, descripcion):
+#         resultado=Nota.crear(usuario_id, titulo, descripcion)
+#         Controlador.respuesta(resultado)
+        # if resultado:
+        #         messagebox.showinfo(icon="info", message=f"\n\t La nota {titulo} se creo correctamente", title="Registro Exitoso")
+        # else:
+        #         messagebox.showerror(icon="error", message=f"\n\t ** Por favor intentelo de nuevo, no fue posible insertar el registro ** ...", title="Usuarios")
+    

@@ -89,10 +89,10 @@ class Camionetas:
 class Camiones:
     
     @staticmethod
-    def insertar(marca, color, modelo, velocidad, caballaje,plazas,eje,capacidadCarga):
+    def insertar(modelo, color, marca, velocidad, caballaje,plazas,eje,capacidadCarga):
         try:
             cursor.execute(
-                "insert into camiones values(null,%s,%s,%s,%s,%s,%s,%s,%s)", (marca, color, modelo, velocidad, caballaje,plazas,eje,capacidadCarga)
+                "insert into camiones values(null,%s,%s,%s,%s,%s,%s,%s,%s)", ( modelo,color,marca,velocidad,caballaje,plazas,eje,capacidadCarga)
             )
             conexion.commit()
             return True
@@ -108,11 +108,11 @@ class Camiones:
             return []
         
     @staticmethod    
-    def actualizar(marca,color,modelo,velocidad,caballaje,plazas,eje,capacidadCarga,id_camion):
+    def actualizar(modelo,color,marca,velocidad,caballaje,plazas,eje,capacidadCarga,id_camion):
         try:
             cursor.execute(
-                "update camiones set marca=%s,color=%s,modelo=%s,velocidad=%s,caballaje=%s,plazas=%s,eje=%s,capacidadCarga=%s where id_camion=%s",
-                (marca,color,modelo,velocidad,caballaje,plazas,eje,capacidadCarga,id_camion))
+                "update camiones set modelo=%s,color=%s,marca=%s,velocidad=%s,caballaje=%s,plazas=%s,eje=%s,capacidadCarga=%s where id_camion=%s",
+                (modelo,color,marca,velocidad,caballaje,plazas,eje,capacidadCarga,id_camion))
             conexion.commit()
             return True
         except:
